@@ -1,16 +1,21 @@
 import React, { PureComponent } from 'react'
+import { object, func, node } from 'prop-types'
 
 const isEmptyChildren = children => React.Children.count(children) === 0
 
 export default class StateReducer extends PureComponent {
+  static propTypes = {
+    children: func,
+    render: func,
+    reducer: func,
+    component: node,
+    state: object, // eslint-disable-line
+  }
+
   constructor(props) {
     super(props)
 
     this.state = props.state || {}
-  }
-
-  dispatch = action => {
-    this.setState(state => this.props.reducer(state, action))
   }
 
   getElementProps() {
@@ -20,9 +25,12 @@ export default class StateReducer extends PureComponent {
     }
   }
 
+  dispatch = action => {
+    this.setState(state => this.props.reducer(state, action))
+  }
+
   render() {
     const { render, component, children } = this.props
-    const args = {}
 
     return component
       ? React.createElement(component, this.getElementProps())

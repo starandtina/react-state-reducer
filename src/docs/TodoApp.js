@@ -2,14 +2,14 @@ import React from 'react'
 
 import StateReducer from '../../lib'
 
-const combineReducers = reducers => (state, action) => {
-  return Object.entries(reducers).reduce((newState, [reducerKey, reducer]) => {
-    return {
+const combineReducers = reducers => (state, action) =>
+  Object.entries(reducers).reduce(
+    (newState, [reducerKey, reducer]) => ({
       ...newState,
       [reducerKey]: reducer(state[reducerKey], action),
-    }
-  }, state)
-}
+    }),
+    state,
+  )
 
 const initialState = {
   todos: [
@@ -40,8 +40,9 @@ const todosReducer = (state, action) => {
     case 'TOGGLE_TODO': {
       const findTodo = todo => todo.id === action.payload
       const todo = state.find(findTodo)
+
       return [
-        ...state.filter(todo => !findTodo(todo)),
+        ...state.filter(todoItem => !findTodo(todoItem)),
         {
           ...todo,
           complete: !todo.complete,
@@ -93,70 +94,72 @@ const applyFilter = (filter, todos) =>
 
 export default () => (
   <StateReducer state={initialState} reducer={rootReducer}>
-    {({ state, dispatch }) => {
-      return (
+    {({ state, dispatch }) => (
+      <div>
         <div>
-          <div>
-            <ul>
-              {applyFilter(state.filter, state.todos).map(todo => (
-                <li
-                  key={todo.id}
-                  onClick={() =>
-                    dispatch({ type: 'TOGGLE_TODO', payload: todo.id })
-                  }
-                  style={{
-                    textDecoration: todo.complete ? 'line-through' : 'none',
-                  }}
-                >
-                  {todo.title}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <button
-              onClick={() => dispatch({ type: 'APPLY_FILTER', payload: 'all' })}
-            >
-              All
-            </button>
-            <button
-              onClick={() =>
-                dispatch({ type: 'APPLY_FILTER', payload: 'completed' })
-              }
-            >
-              Completed
-            </button>
-            <button
-              onClick={() =>
-                dispatch({ type: 'APPLY_FILTER', payload: 'uncompleted' })
-              }
-            >
-              Uncompleted
-            </button>
-          </div>
-          <div>
-            <input
-              value={state.newTodoText}
-              onChange={e =>
-                dispatch({ type: 'SET_NEW_TODO_TEXT', payload: e.target.value })
-              }
-              onKeyPress={e =>
-                e.key === 'Enter' && state.newTodoText
-                  ? dispatch({ type: 'ADD_TODO', payload: state.newTodoText })
-                  : null
-              }
-            />
-            <button
-              onClick={() =>
-                state.newTodoText &&
-                dispatch({ type: 'ADD_TODO', payload: state.newTodoText })
-              }
-            >
-              Add Todo
-            </button>
-          </div>
+          <ul>
+            {applyFilter(state.filter, state.todos).map(todo => (
+              <li
+                key={todo.id}
+                onClick={() =>
+                  dispatch({ type: 'TOGGLE_TODO', payload: todo.id })
+                }
+                style={{
+                  textDecoration: todo.complete ? 'line-through' : 'none',
+                }}
+              >
+                {todo.title}
+              </li>
+            ))}
+          </ul>
         </div>
-      )
-    }}
+        <div>
+          <button
+            type="button"
+            onClick={() => dispatch({ type: 'APPLY_FILTER', payload: 'all' })}
+          >
+            All
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              dispatch({ type: 'APPLY_FILTER', payload: 'completed' })
+            }
+          >
+            Completed
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              dispatch({ type: 'APPLY_FILTER', payload: 'uncompleted' })
+            }
+          >
+            Uncompleted
+          </button>
+        </div>
+        <div>
+          <input
+            value={state.newTodoText}
+            onChange={e =>
+              dispatch({ type: 'SET_NEW_TODO_TEXT', payload: e.target.value })
+            }
+            onKeyPress={e =>
+              e.key === 'Enter' && state.newTodoText
+                ? dispatch({ type: 'ADD_TODO', payload: state.newTodoText })
+                : null
+            }
+          />
+          <button
+            type="button"
+            onClick={() =>
+              state.newTodoText &&
+              dispatch({ type: 'ADD_TODO', payload: state.newTodoText })
+            }
+          >
+            Add Todo
+          </button>
+        </div>
+      </div>
+    )}
   </StateReducer>
 )

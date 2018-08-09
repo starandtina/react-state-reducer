@@ -17,15 +17,17 @@ const rootReducer = (state, action) => {
 
 export default () => (
   <StateReducer state={initialState} reducer={rootReducer}>
-    {({ state: { counter }, dispatch }) => {
-      return (
-        <div>
-          {counter}
-          <br />
-          <button onClick={() => dispatch({ type: 'INC' })}>+</button>
-          <button onClick={() => dispatch({ type: 'DEC' })}>-</button>
-        </div>
-      )
-    }}
+    {({ state: { counter }, dispatch }) => (
+      <div>
+        {counter}
+        <br />
+        <button type="button" onClick={() => dispatch({ type: 'INC' })}>
+          +
+        </button>
+        <button type="button" onClick={() => dispatch({ type: 'DEC' })}>
+          -
+        </button>
+      </div>
+    )}
   </StateReducer>
 )
