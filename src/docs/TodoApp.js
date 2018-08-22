@@ -1,6 +1,6 @@
 import React from 'react'
 
-import StateReducer from '../../lib'
+import StateReducer from '../lib'
 
 const combineReducers = reducers => (state, action) =>
   Object.entries(reducers).reduce(
