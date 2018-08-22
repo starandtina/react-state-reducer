@@ -1,6 +1,6 @@
 {
   "name": "react-state-reducer",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "React state reducer without Redux.",
   "main": "lib/index.js",
   "module": "esm/index.js",
