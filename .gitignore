@@ -2,3 +2,4 @@ node_modules
 lib
 esm
 yarn-error.log
+.DS_Store
